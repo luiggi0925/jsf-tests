@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Ejemplo Primefaces + JSF</title>
+</h:head>
+<h:body>
+	<p:separator />
+	<p:accordionPanel id="equipos" dynamic="true" activeIndex="null"
+		value="#{equipoBean.equipoDecoradoList}" var="equipoDecorado">
+		<p:tab title="#{equipoDecorado.equipo.nombre}" id="tab">
+			<p:commandLink value="Adicionar equipo detalle"
+				update="nuevoItem"
+				oncomplete="PF('nuevoItem').show()">
+				<f:setPropertyActionListener value="#{equipoDecorado}" target="#{equipoBean.equipoSeleccionado}" />
+			</p:commandLink>
+			<p:separator />
+			<p:dataTable id="equipoDetalleTable"
+				value="#{equipoDecorado.equipo.equipoDellateList}" var="detalle">
+				<p:column headerText="Nombre">
+					<h:outputText value="#{detalle.nombre}" />
+				</p:column>
+				<p:column headerText="Placa">
+					<h:outputText value="#{detalle.placa}" />
+				</p:column>
+			</p:dataTable>
+		</p:tab>
+	</p:accordionPanel>
+
+	<p:dialog id="nuevoItem" widgetVar="nuevoItem" resizable="false"
+		closeOnEscape="true">
+		<h:form id="equipoDetalleForm">
+			<p:growl id="growl2" showDetail="true" life="2000" />
+			<h:panelGrid columns="2">
+				<h:outputText value="Nombre equipo " />
+				<p:inputText id="nombre" value="#{equipoBean.nombreEquipoDetalle}" />
+				<h:outputText value="Placa " />
+				<p:inputText id="placa" value="#{equipoBean.placa}" />
+
+				<p:commandButton value="Aceptar"
+					action="#{equipoBean.registarEquipoDetalle}"
+					onsuccess="PF('nuevoItem').hide()">
+				</p:commandButton>
+				<p:commandButton value="Cancelar" onclick="PF('nuevoItem').hide(); return false;" />
+			</h:panelGrid>
+		</h:form>
+	</p:dialog>
+</h:body>
+</html>
